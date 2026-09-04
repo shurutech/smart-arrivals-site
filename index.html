@@ -1,1176 +1,1436 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Arrivals | Automated Patient Arrival Management</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Smart Arrivals | Automated Patient Arrival Management</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family:
+                    "Inter",
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    sans-serif;
+                line-height: 1.6;
+                color: #1a1a2e;
+                background: #ffffff;
+            }
+
+            /* Navigation */
+            nav {
+                position: fixed;
+                top: 0;
+                width: 100%;
+                padding: 1.25rem 5%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background: rgba(255, 255, 255, 0.97);
+                backdrop-filter: blur(10px);
+                z-index: 1000;
+                box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            }
+
+            .logo {
+                font-size: 1.4rem;
+                font-weight: 700;
+                color: #1a1a2e;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .logo-icon {
+                width: 32px;
+                height: 32px;
+                background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .logo span {
+                color: #0ea5e9;
+            }
+
+            .nav-links {
+                display: flex;
+                gap: 2rem;
+                list-style: none;
+            }
+
+            .nav-links a {
+                text-decoration: none;
+                color: #475569;
+                font-weight: 500;
+                font-size: 0.95rem;
+                transition: color 0.3s;
+            }
+
+            .nav-links a:hover {
+                color: #0ea5e9;
+            }
+
+            .nav-cta {
+                background: #0ea5e9;
+                color: white !important;
+                padding: 0.6rem 1.25rem;
+                border-radius: 8px;
+                transition: all 0.3s !important;
+            }
+
+            .nav-cta:hover {
+                background: #0284c7;
+                color: white !important;
+            }
+
+            /* Hero Section */
+            .hero {
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                padding: 8rem 5% 6rem;
+                background: linear-gradient(
+                    165deg,
+                    #f0f9ff 0%,
+                    #e0f2fe 50%,
+                    #f0f9ff 100%
+                );
+                position: relative;
+                overflow: hidden;
+            }
+
+            .hero::before {
+                content: "";
+                position: absolute;
+                top: -50%;
+                right: -20%;
+                width: 70%;
+                height: 150%;
+                background: radial-gradient(
+                    circle,
+                    rgba(14, 165, 233, 0.08) 0%,
+                    transparent 70%
+                );
+                pointer-events: none;
+            }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            line-height: 1.6;
-            color: #1a1a2e;
-            background: #ffffff;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 1.25rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.97);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
-        }
-
-        .logo {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #1a1a2e;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo span {
-            color: #0ea5e9;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #475569;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #0ea5e9;
-        }
-
-        .nav-cta {
-            background: #0ea5e9;
-            color: white !important;
-            padding: 0.6rem 1.25rem;
-            border-radius: 8px;
-            transition: all 0.3s !important;
-        }
-
-        .nav-cta:hover {
-            background: #0284c7;
-            color: white !important;
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 8rem 5% 6rem;
-            background: linear-gradient(165deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 70%;
-            height: 150%;
-            background: radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .hero-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: white;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: #0ea5e9;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        .hero-badge svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        .hero h1 {
-            font-size: 3.25rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            line-height: 1.15;
-            color: #0f172a;
-        }
-
-        .hero h1 span {
-            color: #0ea5e9;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: #475569;
-            margin-bottom: 2rem;
-            max-width: 520px;
-            line-height: 1.7;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 1rem 2rem;
-            background: #0ea5e9;
-            color: white;
-            text-decoration: none;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            background: #0284c7;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.25);
-        }
-
-        .btn-outline {
-            background: white;
-            border: 2px solid #e2e8f0;
-            color: #475569;
-        }
-
-        .btn-outline:hover {
-            background: #f8fafc;
-            border-color: #cbd5e1;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-        }
-
-        .hero-visual {
-            position: relative;
-        }
-
-        .hero-card {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-
-        .hero-card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .hero-card-title {
-            font-weight: 600;
-            color: #0f172a;
-        }
-
-        .status-badge {
-            background: #dcfce7;
-            color: #16a34a;
-            padding: 0.35rem 0.75rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .delay-indicator {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border-radius: 12px;
-            padding: 1.25rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .delay-label {
-            font-size: 0.85rem;
-            color: #92400e;
-            margin-bottom: 0.25rem;
-        }
-
-        .delay-time {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #78350f;
-        }
-
-        .patient-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .patient-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.75rem 1rem;
-            background: #f8fafc;
-            border-radius: 10px;
-        }
-
-        .patient-info {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .patient-avatar {
-            width: 36px;
-            height: 36px;
-            background: #e0f2fe;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            color: #0ea5e9;
-            font-size: 0.85rem;
-        }
-
-        .patient-name {
-            font-weight: 500;
-            color: #0f172a;
-            font-size: 0.9rem;
-        }
-
-        .patient-original {
-            font-size: 0.8rem;
-            color: #94a3b8;
-        }
-
-        .patient-new-time {
-            background: #0ea5e9;
-            color: white;
-            padding: 0.35rem 0.75rem;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        .message-sent {
-            color: #16a34a;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-        }
-
-        .floating-notification {
-            position: absolute;
-            bottom: -30px;
-            right: -20px;
-            background: white;
-            padding: 1rem 1.25rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .notification-icon {
-            width: 40px;
-            height: 40px;
-            background: #dcfce7;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .notification-text {
-            font-size: 0.85rem;
-        }
-
-        .notification-text strong {
-            display: block;
-            color: #0f172a;
-        }
-
-        .notification-text span {
-            color: #64748b;
-        }
-
-        /* Stats Section */
-        .stats {
-            padding: 4rem 5%;
-            background: white;
-            border-top: 1px solid #f1f5f9;
-        }
-
-        .stats-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #0ea5e9;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: #64748b;
-            font-size: 0.95rem;
-        }
-
-        /* Problem Section */
-        .problem {
-            padding: 6rem 5%;
-            background: #0f172a;
-            color: white;
-        }
-
-        .problem-container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .problem h2 {
-            font-size: 2.25rem;
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-
-        .problem > .problem-container > p {
-            text-align: center;
-            color: #94a3b8;
-            font-size: 1.1rem;
-            margin-bottom: 3rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .problem-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-        }
-
-        .problem-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 1.75rem;
-        }
-
-        .problem-card h3 {
-            color: #f87171;
-            font-size: 1.1rem;
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .problem-card p {
-            color: #cbd5e1;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        /* Solution Section */
-        .solution {
-            padding: 6rem 5%;
-            background: #f8fafc;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-header h2 {
-            font-size: 2.25rem;
-            color: #0f172a;
-            margin-bottom: 1rem;
-        }
-
-        .section-header p {
-            color: #64748b;
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .solution-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .solution-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s;
-        }
-
-        .solution-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-        }
-
-        .solution-icon {
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.25rem;
-        }
-
-        .solution-icon svg {
-            width: 28px;
-            height: 28px;
-            color: #0284c7;
-        }
-
-        .solution-card h3 {
-            font-size: 1.15rem;
-            margin-bottom: 0.75rem;
-            color: #0f172a;
-        }
-
-        .solution-card p {
-            color: #64748b;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        /* How It Works */
-        .how-it-works {
-            padding: 6rem 5%;
-            background: white;
-        }
-
-        .steps {
-            max-width: 900px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        .step {
-            display: flex;
-            gap: 2rem;
-            align-items: flex-start;
-        }
-
-        .step-number {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 1.25rem;
-            flex-shrink: 0;
-        }
-
-        .step-content h3 {
-            font-size: 1.2rem;
-            color: #0f172a;
-            margin-bottom: 0.5rem;
-        }
-
-        .step-content p {
-            color: #64748b;
-            line-height: 1.6;
-        }
-
-        /* Compliance Section */
-        .compliance {
-            padding: 6rem 5%;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: white;
-        }
-
-        .compliance-container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .compliance-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .compliance-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(34, 197, 94, 0.15);
-            border: 1px solid rgba(34, 197, 94, 0.3);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            color: #4ade80;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 1.5rem;
-        }
-
-        .compliance-header h2 {
-            font-size: 2.25rem;
-            margin-bottom: 1rem;
-        }
-
-        .compliance-header p {
-            color: #94a3b8;
-            font-size: 1.05rem;
-        }
-
-        .compliance-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.25rem;
-        }
-
-        .compliance-item {
-            display: flex;
-            gap: 1rem;
-            padding: 1.25rem;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-        }
-
-        .compliance-check {
-            width: 24px;
-            height: 24px;
-            background: rgba(34, 197, 94, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .compliance-check svg {
-            width: 14px;
-            height: 14px;
-            color: #4ade80;
-        }
-
-        .compliance-item p {
-            color: #e2e8f0;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        /* CTA Section */
-        .cta {
-            padding: 6rem 5%;
-            background: #f0f9ff;
-            text-align: center;
-        }
-
-        .cta-container {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .cta h2 {
-            font-size: 2.25rem;
-            color: #0f172a;
-            margin-bottom: 1rem;
-        }
-
-        .cta p {
-            color: #64748b;
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-        }
-
-        /* Contact Section */
-        .contact {
-            padding: 6rem 5%;
-            background: white;
-        }
-
-        .contact-container {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .contact h2 {
-            font-size: 2.25rem;
-            color: #0f172a;
-            margin-bottom: 1rem;
-        }
-
-        .contact > .contact-container > p {
-            color: #64748b;
-            margin-bottom: 2.5rem;
-        }
-
-        .contact-cards {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-        }
-
-        .contact-card {
-            padding: 2rem;
-            background: #f8fafc;
-            border-radius: 16px;
-            text-align: center;
-        }
-
-        .contact-card-icon {
-            width: 56px;
-            height: 56px;
-            background: #e0f2fe;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.25rem;
-        }
-
-        .contact-card-icon svg {
-            width: 24px;
-            height: 24px;
-            color: #0284c7;
-        }
-
-        .contact-card h3 {
-            font-size: 1.1rem;
-            color: #0f172a;
-            margin-bottom: 0.5rem;
-        }
-
-        .contact-card p {
-            color: #64748b;
-            font-size: 0.95rem;
-        }
-
-        .contact-card a {
-            color: #0ea5e9;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .contact-card a:hover {
-            text-decoration: underline;
-        }
-
-        /* Footer */
-        footer {
-            padding: 3rem 5%;
-            background: #0f172a;
-            color: white;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .footer-logo {
-            font-size: 1.25rem;
-            font-weight: 700;
-        }
-
-        .footer-logo span {
-            color: #0ea5e9;
-        }
-
-        footer p {
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .footer-links a {
-            color: #94a3b8;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s;
-        }
-
-        .footer-links a:hover {
-            color: white;
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
             .hero-container {
-                grid-template-columns: 1fr;
-                text-align: center;
+                max-width: 1200px;
+                margin: 0 auto;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 4rem;
+                align-items: center;
             }
 
             .hero-content {
-                order: 1;
+                position: relative;
+                z-index: 1;
             }
 
-            .hero-visual {
-                order: 2;
-                max-width: 500px;
-                margin: 0 auto;
+            .hero-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                background: white;
+                padding: 0.5rem 1rem;
+                border-radius: 50px;
+                font-size: 0.85rem;
+                font-weight: 500;
+                color: #0ea5e9;
+                margin-bottom: 1.5rem;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            }
+
+            .hero-badge svg {
+                width: 16px;
+                height: 16px;
+            }
+
+            .hero h1 {
+                font-size: 3.25rem;
+                font-weight: 700;
+                margin-bottom: 1.5rem;
+                line-height: 1.15;
+                color: #0f172a;
+            }
+
+            .hero h1 span {
+                color: #0ea5e9;
             }
 
             .hero p {
+                font-size: 1.2rem;
+                color: #475569;
+                margin-bottom: 2rem;
+                max-width: 520px;
+                line-height: 1.7;
+            }
+
+            .hero-buttons {
+                display: flex;
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                padding: 1rem 2rem;
+                background: #0ea5e9;
+                color: white;
+                text-decoration: none;
+                border-radius: 10px;
+                font-weight: 600;
+                font-size: 1rem;
+                transition: all 0.3s;
+                border: none;
+                cursor: pointer;
+            }
+
+            .btn:hover {
+                background: #0284c7;
+                transform: translateY(-2px);
+                box-shadow: 0 10px 30px rgba(14, 165, 233, 0.25);
+            }
+
+            .btn-outline {
+                background: white;
+                border: 2px solid #e2e8f0;
+                color: #475569;
+            }
+
+            .btn-outline:hover {
+                background: #f8fafc;
+                border-color: #cbd5e1;
+                transform: translateY(-2px);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            }
+
+            .hero-visual {
+                position: relative;
+            }
+
+            .hero-card {
+                background: white;
+                border-radius: 20px;
+                padding: 2rem;
+                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+                position: relative;
+            }
+
+            .hero-card-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 1.5rem;
+                padding-bottom: 1rem;
+                border-bottom: 1px solid #f1f5f9;
+            }
+
+            .hero-card-title {
+                font-weight: 600;
+                color: #0f172a;
+            }
+
+            .status-badge {
+                background: #dcfce7;
+                color: #16a34a;
+                padding: 0.35rem 0.75rem;
+                border-radius: 50px;
+                font-size: 0.8rem;
+                font-weight: 500;
+            }
+
+            .delay-indicator {
+                background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+                border-radius: 12px;
+                padding: 1.25rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .delay-label {
+                font-size: 0.85rem;
+                color: #92400e;
+                margin-bottom: 0.25rem;
+            }
+
+            .delay-time {
+                font-size: 2rem;
+                font-weight: 700;
+                color: #78350f;
+            }
+
+            .patient-list {
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .patient-item {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0.75rem 1rem;
+                background: #f8fafc;
+                border-radius: 10px;
+            }
+
+            .patient-info {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+            }
+
+            .patient-avatar {
+                width: 36px;
+                height: 36px;
+                background: #e0f2fe;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 600;
+                color: #0ea5e9;
+                font-size: 0.85rem;
+            }
+
+            .patient-name {
+                font-weight: 500;
+                color: #0f172a;
+                font-size: 0.9rem;
+            }
+
+            .patient-original {
+                font-size: 0.8rem;
+                color: #94a3b8;
+            }
+
+            .patient-new-time {
+                background: #0ea5e9;
+                color: white;
+                padding: 0.35rem 0.75rem;
+                border-radius: 6px;
+                font-weight: 600;
+                font-size: 0.85rem;
+            }
+
+            .message-sent {
+                color: #16a34a;
+                font-size: 0.8rem;
+                display: flex;
+                align-items: center;
+                gap: 0.25rem;
+            }
+
+            .floating-notification {
+                position: absolute;
+                bottom: -30px;
+                right: -20px;
+                background: white;
+                padding: 1rem 1.25rem;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                animation: float 3s ease-in-out infinite;
+            }
+
+            @keyframes float {
+                0%,
+                100% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(-10px);
+                }
+            }
+
+            .notification-icon {
+                width: 40px;
+                height: 40px;
+                background: #dcfce7;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .notification-text {
+                font-size: 0.85rem;
+            }
+
+            .notification-text strong {
+                display: block;
+                color: #0f172a;
+            }
+
+            .notification-text span {
+                color: #64748b;
+            }
+
+            /* Stats Section */
+            .stats {
+                padding: 4rem 5%;
+                background: white;
+                border-top: 1px solid #f1f5f9;
+            }
+
+            .stats-container {
+                max-width: 1000px;
+                margin: 0 auto;
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 2rem;
+            }
+
+            .stat-item {
+                text-align: center;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+                font-weight: 700;
+                color: #0ea5e9;
+                margin-bottom: 0.5rem;
+            }
+
+            .stat-label {
+                color: #64748b;
+                font-size: 0.95rem;
+            }
+
+            /* Problem Section */
+            .problem {
+                padding: 6rem 5%;
+                background: #0f172a;
+                color: white;
+            }
+
+            .problem-container {
+                max-width: 1000px;
+                margin: 0 auto;
+            }
+
+            .problem h2 {
+                font-size: 2.25rem;
+                margin-bottom: 1rem;
+                text-align: center;
+            }
+
+            .problem > .problem-container > p {
+                text-align: center;
+                color: #94a3b8;
+                font-size: 1.1rem;
+                margin-bottom: 3rem;
+                max-width: 600px;
                 margin-left: auto;
                 margin-right: auto;
             }
 
-            .hero-buttons {
-                justify-content: center;
+            .problem-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+
+            .problem-card {
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 16px;
+                padding: 1.75rem;
+            }
+
+            .problem-card h3 {
+                color: #f87171;
+                font-size: 1.1rem;
+                margin-bottom: 0.75rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .problem-card p {
+                color: #cbd5e1;
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+
+            /* Solution Section */
+            .solution {
+                padding: 6rem 5%;
+                background: #f8fafc;
+            }
+
+            .section-header {
+                text-align: center;
+                margin-bottom: 4rem;
+            }
+
+            .section-header h2 {
+                font-size: 2.25rem;
+                color: #0f172a;
+                margin-bottom: 1rem;
+            }
+
+            .section-header p {
+                color: #64748b;
+                font-size: 1.1rem;
+                max-width: 600px;
+                margin: 0 auto;
             }
 
             .solution-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 2rem;
+                max-width: 1100px;
+                margin: 0 auto;
             }
 
-            .hero h1 {
+            .solution-card {
+                background: white;
+                padding: 2rem;
+                border-radius: 16px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+                border: 1px solid #e2e8f0;
+                transition: all 0.3s;
+            }
+
+            .solution-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            }
+
+            .solution-icon {
+                width: 56px;
+                height: 56px;
+                background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+                border-radius: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 1.25rem;
+            }
+
+            .solution-icon svg {
+                width: 28px;
+                height: 28px;
+                color: #0284c7;
+            }
+
+            .solution-card h3 {
+                font-size: 1.15rem;
+                margin-bottom: 0.75rem;
+                color: #0f172a;
+            }
+
+            .solution-card p {
+                color: #64748b;
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+
+            /* How It Works */
+            .how-it-works {
+                padding: 6rem 5%;
+                background: white;
+            }
+
+            .steps {
+                max-width: 900px;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .step {
+                display: flex;
+                gap: 2rem;
+                align-items: flex-start;
+            }
+
+            .step-number {
+                width: 48px;
+                height: 48px;
+                background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-weight: 700;
+                font-size: 1.25rem;
+                flex-shrink: 0;
+            }
+
+            .step-content h3 {
+                font-size: 1.2rem;
+                color: #0f172a;
+                margin-bottom: 0.5rem;
+            }
+
+            .step-content p {
+                color: #64748b;
+                line-height: 1.6;
+            }
+
+            /* Compliance Section */
+            .compliance {
+                padding: 6rem 5%;
+                background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+                color: white;
+            }
+
+            .compliance-container {
+                max-width: 1000px;
+                margin: 0 auto;
+            }
+
+            .compliance-header {
+                text-align: center;
+                margin-bottom: 3rem;
+            }
+
+            .compliance-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                background: rgba(34, 197, 94, 0.15);
+                border: 1px solid rgba(34, 197, 94, 0.3);
+                padding: 0.5rem 1rem;
+                border-radius: 50px;
+                color: #4ade80;
+                font-size: 0.9rem;
+                font-weight: 500;
+                margin-bottom: 1.5rem;
+            }
+
+            .compliance-header h2 {
                 font-size: 2.25rem;
+                margin-bottom: 1rem;
             }
 
-            .stats-container {
+            .compliance-header p {
+                color: #94a3b8;
+                font-size: 1.05rem;
+            }
+
+            .compliance-grid {
+                display: grid;
                 grid-template-columns: repeat(2, 1fr);
+                gap: 1.25rem;
             }
 
-            .problem-grid,
-            .compliance-grid,
+            .compliance-item {
+                display: flex;
+                gap: 1rem;
+                padding: 1.25rem;
+                background: rgba(255, 255, 255, 0.03);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 12px;
+            }
+
+            .compliance-check {
+                width: 24px;
+                height: 24px;
+                background: rgba(34, 197, 94, 0.2);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+
+            .compliance-check svg {
+                width: 14px;
+                height: 14px;
+                color: #4ade80;
+            }
+
+            .compliance-item p {
+                color: #e2e8f0;
+                font-size: 0.95rem;
+                line-height: 1.5;
+            }
+
+            /* CTA Section */
+            .cta {
+                padding: 6rem 5%;
+                background: #f0f9ff;
+                text-align: center;
+            }
+
+            .cta-container {
+                max-width: 700px;
+                margin: 0 auto;
+            }
+
+            .cta h2 {
+                font-size: 2.25rem;
+                color: #0f172a;
+                margin-bottom: 1rem;
+            }
+
+            .cta p {
+                color: #64748b;
+                font-size: 1.1rem;
+                margin-bottom: 2rem;
+            }
+
+            /* Contact Section */
+            .contact {
+                padding: 6rem 5%;
+                background: white;
+            }
+
+            .contact-container {
+                max-width: 800px;
+                margin: 0 auto;
+                text-align: center;
+            }
+
+            .contact h2 {
+                font-size: 2.25rem;
+                color: #0f172a;
+                margin-bottom: 1rem;
+            }
+
+            .contact > .contact-container > p {
+                color: #64748b;
+                margin-bottom: 2.5rem;
+            }
+
             .contact-cards {
-                grid-template-columns: 1fr;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
             }
 
-            .floating-notification {
-                display: none;
+            .contact-card {
+                padding: 2rem;
+                background: #f8fafc;
+                border-radius: 16px;
+                text-align: center;
+            }
+
+            .contact-card-icon {
+                width: 56px;
+                height: 56px;
+                background: #e0f2fe;
+                border-radius: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 1.25rem;
+            }
+
+            .contact-card-icon svg {
+                width: 24px;
+                height: 24px;
+                color: #0284c7;
+            }
+
+            .contact-card h3 {
+                font-size: 1.1rem;
+                color: #0f172a;
+                margin-bottom: 0.5rem;
+            }
+
+            .contact-card p {
+                color: #64748b;
+                font-size: 0.95rem;
+            }
+
+            .contact-card a {
+                color: #0ea5e9;
+                text-decoration: none;
+                font-weight: 500;
+            }
+
+            .contact-card a:hover {
+                text-decoration: underline;
+            }
+
+            /* Footer */
+            footer {
+                padding: 3rem 5%;
+                background: #0f172a;
+                color: white;
             }
 
             .footer-content {
-                flex-direction: column;
-                gap: 1.5rem;
-                text-align: center;
+                max-width: 1200px;
+                margin: 0 auto;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
             }
-        }
-    </style>
-</head>
-<body>
-    <nav>
-        <div class="logo">
-            <div class="logo-icon">
-                <svg fill="white" viewBox="0 0 24 24" width="18" height="18"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-            </div>
-            Smart<span>Arrivals</span>
-        </div>
-        <ul class="nav-links">
-            <li><a href="#problem">Problem</a></li>
-            <li><a href="#solution">Solution</a></li>
-            <li><a href="#how-it-works">How It Works</a></li>
-            <li><a href="#compliance">Compliance</a></li>
-            <li><a href="#contact" class="nav-cta">Contact Us</a></li>
-        </ul>
-    </nav>
 
-    <section class="hero" id="home">
-        <div class="hero-container">
-            <div class="hero-content">
-                <div class="hero-badge">
-                    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-                    HIPAA Compliant
+            .footer-logo {
+                font-size: 1.25rem;
+                font-weight: 700;
+            }
+
+            .footer-logo span {
+                color: #0ea5e9;
+            }
+
+            footer p {
+                color: #64748b;
+                font-size: 0.9rem;
+            }
+
+            .footer-links {
+                display: flex;
+                gap: 2rem;
+            }
+
+            .footer-links a {
+                color: #94a3b8;
+                text-decoration: none;
+                font-size: 0.9rem;
+                transition: color 0.3s;
+            }
+
+            .footer-links a:hover {
+                color: white;
+            }
+            /* Responsive */
+            @media (max-width: 1024px) {
+                .hero-container {
+                    grid-template-columns: 1fr;
+                    text-align: center;
+                }
+
+                .hero-content {
+                    order: 1;
+                }
+
+                .hero-visual {
+                    order: 2;
+                    max-width: 500px;
+                    margin: 0 auto;
+                }
+
+                .hero p {
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+
+                .hero-buttons {
+                    justify-content: center;
+                }
+
+                .solution-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .nav-links {
+                    display: none;
+                }
+
+                .hero h1 {
+                    font-size: 2.25rem;
+                }
+
+                .stats-container {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+
+                .problem-grid,
+                .compliance-grid,
+                .contact-cards {
+                    grid-template-columns: 1fr;
+                }
+
+                .floating-notification {
+                    display: none;
+                }
+
+                .footer-content {
+                    flex-direction: column;
+                    gap: 1.5rem;
+                    text-align: center;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <nav>
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg
+                        fill="white"
+                        viewBox="0 0 24 24"
+                        width="18"
+                        height="18"
+                    >
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                        />
+                    </svg>
                 </div>
-                <h1>Patients Wait <span>at Home</span>, Not in Your Lobby</h1>
-                <p>Smart Arrivals monitors your clinic's schedule in real-time and automatically texts patients updated arrival times, so they spend less time waiting and your waiting room never overflows.</p>
-                <div class="hero-buttons">
-                    <a href="#contact" class="btn">Request a Demo</a>
-                    <a href="#how-it-works" class="btn btn-outline">See How It Works</a>
-                </div>
+                Smart<span>Arrivals</span>
             </div>
-            <div class="hero-visual">
-                <div class="hero-card">
-                    <div class="hero-card-header">
-                        <span class="hero-card-title">Live Dashboard</span>
-                        <span class="status-badge">Active</span>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#compliance">Compliance</a></li>
+                <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <section class="hero" id="home">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <svg fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"
+                            />
+                        </svg>
+                        HIPAA Compliant
                     </div>
-                    <div class="delay-indicator">
-                        <div class="delay-label">Current Delay</div>
-                        <div class="delay-time">47 minutes</div>
+                    <h1>
+                        Patients Wait <span>at Home</span>, Not in Your Lobby
+                    </h1>
+                    <p>
+                        Smart Arrivals monitors your clinic's schedule in
+                        real-time and automatically texts patients updated
+                        arrival times, so they spend less time waiting and your
+                        waiting room never overflows.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#contact" class="btn">Request a Demo</a>
+                        <a href="#how-it-works" class="btn btn-outline"
+                            >See How It Works</a
+                        >
                     </div>
-                    <div class="patient-list">
-                        <div class="patient-item">
-                            <div class="patient-info">
-                                <div class="patient-avatar">JD</div>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-card">
+                        <div class="hero-card-header">
+                            <span class="hero-card-title">Live Dashboard</span>
+                            <span class="status-badge">Active</span>
+                        </div>
+                        <div class="delay-indicator">
+                            <div class="delay-label">Current Delay</div>
+                            <div class="delay-time">47 minutes</div>
+                        </div>
+                        <div class="patient-list">
+                            <div class="patient-item">
+                                <div class="patient-info">
+                                    <div class="patient-avatar">JD</div>
+                                    <div>
+                                        <div class="patient-name">
+                                            Patient #4721
+                                        </div>
+                                        <div class="patient-original">
+                                            Original: 2:30 PM
+                                        </div>
+                                    </div>
+                                </div>
                                 <div>
-                                    <div class="patient-name">Patient #4721</div>
-                                    <div class="patient-original">Original: 2:30 PM</div>
+                                    <div class="patient-new-time">3:15 PM</div>
+                                    <div class="message-sent">
+                                        <svg
+                                            fill="currentColor"
+                                            viewBox="0 0 24 24"
+                                            width="12"
+                                            height="12"
+                                        >
+                                            <path
+                                                d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                                            />
+                                        </svg>
+                                        Sent
+                                    </div>
                                 </div>
                             </div>
-                            <div>
-                                <div class="patient-new-time">3:15 PM</div>
-                                <div class="message-sent">
-                                    <svg fill="currentColor" viewBox="0 0 24 24" width="12" height="12"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                                    Sent
+                            <div class="patient-item">
+                                <div class="patient-info">
+                                    <div class="patient-avatar">MR</div>
+                                    <div>
+                                        <div class="patient-name">
+                                            Patient #4722
+                                        </div>
+                                        <div class="patient-original">
+                                            Original: 2:30 PM
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="patient-new-time">3:15 PM</div>
+                                    <div class="message-sent">
+                                        <svg
+                                            fill="currentColor"
+                                            viewBox="0 0 24 24"
+                                            width="12"
+                                            height="12"
+                                        >
+                                            <path
+                                                d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                                            />
+                                        </svg>
+                                        Sent
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="patient-item">
-                            <div class="patient-info">
-                                <div class="patient-avatar">MR</div>
-                                <div>
-                                    <div class="patient-name">Patient #4722</div>
-                                    <div class="patient-original">Original: 2:30 PM</div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="patient-new-time">3:15 PM</div>
-                                <div class="message-sent">
-                                    <svg fill="currentColor" viewBox="0 0 24 24" width="12" height="12"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                                    Sent
-                                </div>
-                            </div>
+                    </div>
+                    <div class="floating-notification">
+                        <div class="notification-icon">
+                            <svg
+                                fill="#16a34a"
+                                viewBox="0 0 24 24"
+                                width="20"
+                                height="20"
+                            >
+                                <path
+                                    d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"
+                                />
+                            </svg>
+                        </div>
+                        <div class="notification-text">
+                            <strong>Message Delivered</strong>
+                            <span>3 patients notified</span>
                         </div>
                     </div>
                 </div>
-                <div class="floating-notification">
-                    <div class="notification-icon">
-                        <svg fill="#16a34a" viewBox="0 0 24 24" width="20" height="20"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-                    </div>
-                    <div class="notification-text">
-                        <strong>Message Delivered</strong>
-                        <span>3 patients notified</span>
-                    </div>
-                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="stats">
-        <div class="stats-container">
-            <div class="stat-item">
-                <div class="stat-number">100%</div>
-                <div class="stat-label">Automated</div>
+        <section class="stats">
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Automated</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Staff workload</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Monitoring</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">HIPAA</div>
+                    <div class="stat-label">Compliant</div>
+                </div>
             </div>
-            <div class="stat-item">
-                <div class="stat-number">0</div>
-                <div class="stat-label">Staff workload</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">24/7</div>
-                <div class="stat-label">Monitoring</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">HIPAA</div>
-                <div class="stat-label">Compliant</div>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="problem" id="problem">
-        <div class="problem-container">
-            <h2>The Waiting Room Problem</h2>
-            <p>High-volume practices face a daily challenge that costs patients, staff, and revenue.</p>
-            <div class="problem-grid">
-                <div class="problem-card">
-                    <h3>
-                        <svg fill="currentColor" viewBox="0 0 24 24" width="20" height="20"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-                        Delays Compound
-                    </h3>
-                    <p>Small delays around each visit build up throughout the day, pushing the schedule further behind.</p>
-                </div>
-                <div class="problem-card">
-                    <h3>
-                        <svg fill="currentColor" viewBox="0 0 24 24" width="20" height="20"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-                        Patients Wait for Hours
-                    </h3>
-                    <p>Patients arrive on time and end up waiting in a crowded lobby, growing frustrated.</p>
-                </div>
-                <div class="problem-card">
-                    <h3>
-                        <svg fill="currentColor" viewBox="0 0 24 24" width="20" height="20"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-                        Walkouts Cost Revenue
-                    </h3>
-                    <p>Frustrated patients walk out. That's lost revenue and damaged relationships.</p>
-                </div>
-                <div class="problem-card">
-                    <h3>
-                        <svg fill="currentColor" viewBox="0 0 24 24" width="20" height="20"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-                        Manual Solutions Fail
-                    </h3>
-                    <p>Staff are too busy to monitor delays. By the time anyone notices, it's too late.</p>
+        <section class="problem" id="problem">
+            <div class="problem-container">
+                <h2>The Waiting Room Problem</h2>
+                <p>
+                    High-volume practices face a daily challenge that costs
+                    patients, staff, and revenue.
+                </p>
+                <div class="problem-grid">
+                    <div class="problem-card">
+                        <h3>
+                            <svg
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                                width="20"
+                                height="20"
+                            >
+                                <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                />
+                            </svg>
+                            Delays Compound
+                        </h3>
+                        <p>
+                            Small delays around each visit build up throughout
+                            the day, pushing the schedule further behind.
+                        </p>
+                    </div>
+                    <div class="problem-card">
+                        <h3>
+                            <svg
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                                width="20"
+                                height="20"
+                            >
+                                <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                />
+                            </svg>
+                            Patients Wait for Hours
+                        </h3>
+                        <p>
+                            Patients arrive on time and end up waiting in a
+                            crowded lobby, growing frustrated.
+                        </p>
+                    </div>
+                    <div class="problem-card">
+                        <h3>
+                            <svg
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                                width="20"
+                                height="20"
+                            >
+                                <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                />
+                            </svg>
+                            Walkouts Cost Revenue
+                        </h3>
+                        <p>
+                            Frustrated patients walk out. That's lost revenue
+                            and damaged relationships.
+                        </p>
+                    </div>
+                    <div class="problem-card">
+                        <h3>
+                            <svg
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                                width="20"
+                                height="20"
+                            >
+                                <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                />
+                            </svg>
+                            Manual Solutions Fail
+                        </h3>
+                        <p>
+                            Staff are too busy to monitor delays. By the time
+                            anyone notices, it's too late.
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="solution" id="solution">
-        <div class="section-header">
-            <h2>The Smart Arrivals Solution</h2>
-            <p>Continuous monitoring and automated patient communication, so your waiting room stays manageable.</p>
-        </div>
-        <div class="solution-grid">
-            <div class="solution-card">
-                <div class="solution-icon">
-                    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
-                </div>
-                <h3>Real-Time Monitoring</h3>
-                <p>Continuously tracks your clinic's schedule and knows exactly when you're running behind.</p>
+        <section class="solution" id="solution">
+            <div class="section-header">
+                <h2>The Smart Arrivals Solution</h2>
+                <p>
+                    Continuous monitoring and automated patient communication,
+                    so your waiting room stays manageable.
+                </p>
             </div>
-            <div class="solution-card">
-                <div class="solution-icon">
-                    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <div class="solution-icon">
+                        <svg fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"
+                            />
+                        </svg>
+                    </div>
+                    <h3>Real-Time Monitoring</h3>
+                    <p>
+                        Continuously tracks your clinic's schedule and knows
+                        exactly when you're running behind.
+                    </p>
                 </div>
-                <h3>Automated Messaging</h3>
-                <p>Patients receive updated arrival times via text—no staff action required.</p>
-            </div>
-            <div class="solution-card">
-                <div class="solution-icon">
-                    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm3-6c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3z"/></svg>
+                <div class="solution-card">
+                    <div class="solution-icon">
+                        <svg fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"
+                            />
+                        </svg>
+                    </div>
+                    <h3>Automated Messaging</h3>
+                    <p>
+                        Patients receive updated arrival times via text—no staff
+                        action required.
+                    </p>
                 </div>
-                <h3>Intelligent Timing</h3>
-                <p>Acts only when needed, with smart limits to avoid overwhelming patients with messages.</p>
-            </div>
-            <div class="solution-card">
-                <div class="solution-icon">
-                    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+                <div class="solution-card">
+                    <div class="solution-icon">
+                        <svg fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm3-6c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3z"
+                            />
+                        </svg>
+                    </div>
+                    <h3>Intelligent Timing</h3>
+                    <p>
+                        Acts only when needed, with smart limits to avoid
+                        overwhelming patients with messages.
+                    </p>
                 </div>
-                <h3>Configurable Rules</h3>
-                <p>Set which appointment types and patient groups should never be delayed.</p>
-            </div>
-            <div class="solution-card">
-                <div class="solution-icon">
-                    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+                <div class="solution-card">
+                    <div class="solution-icon">
+                        <svg fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"
+                            />
+                        </svg>
+                    </div>
+                    <h3>Configurable Rules</h3>
+                    <p>
+                        Set which appointment types and patient groups should
+                        never be delayed.
+                    </p>
                 </div>
-                <h3>Owner Dashboard</h3>
-                <p>Full visibility and control. See what's happening and stop the system instantly if needed.</p>
-            </div>
-            <div class="solution-card">
-                <div class="solution-icon">
-                    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/></svg>
+                <div class="solution-card">
+                    <div class="solution-icon">
+                        <svg fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"
+                            />
+                        </svg>
+                    </div>
+                    <h3>Owner Dashboard</h3>
+                    <p>
+                        Full visibility and control. See what's happening and
+                        stop the system instantly if needed.
+                    </p>
                 </div>
-                <h3>Staff Notifications</h3>
-                <p>Your front desk stays informed without having to operate anything.</p>
+                <div class="solution-card">
+                    <div class="solution-icon">
+                        <svg fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"
+                            />
+                        </svg>
+                    </div>
+                    <h3>Staff Notifications</h3>
+                    <p>
+                        Your front desk stays informed without having to operate
+                        anything.
+                    </p>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="how-it-works" id="how-it-works">
-        <div class="section-header">
-            <h2>How It Works</h2>
-            <p>Intelligent automation that runs in the background all day</p>
-        </div>
-        <div class="steps">
-            <div class="step">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                    <h3>Connect</h3>
-                    <p>Smart Arrivals integrates with your existing practice management system using secure, read-only access.</p>
+        <section class="how-it-works" id="how-it-works">
+            <div class="section-header">
+                <h2>How It Works</h2>
+                <p>
+                    Intelligent automation that runs in the background all day
+                </p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Connect</h3>
+                        <p>
+                            Smart Arrivals integrates with your existing
+                            practice management system using secure, read-only
+                            access.
+                        </p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Monitor</h3>
+                        <p>
+                            The system continuously watches your schedule and
+                            intelligently determines when the clinic is running
+                            behind.
+                        </p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Notify</h3>
+                        <p>
+                            Patients who haven't left home yet receive a text
+                            with an updated arrival time—automatically.
+                        </p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Adapt</h3>
+                        <p>
+                            As conditions change throughout the day, the system
+                            adjusts. Patients always have a current arrival
+                            time.
+                        </p>
+                    </div>
                 </div>
             </div>
-            <div class="step">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                    <h3>Monitor</h3>
-                    <p>The system continuously watches your schedule and intelligently determines when the clinic is running behind.</p>
-                </div>
-            </div>
-            <div class="step">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                    <h3>Notify</h3>
-                    <p>Patients who haven't left home yet receive a text with an updated arrival time—automatically.</p>
-                </div>
-            </div>
-            <div class="step">
-                <div class="step-number">4</div>
-                <div class="step-content">
-                    <h3>Adapt</h3>
-                    <p>As conditions change throughout the day, the system adjusts. Patients always have a current arrival time.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="compliance" id="compliance">
-        <div class="compliance-container">
-            <div class="compliance-header">
-                <div class="compliance-badge">
-                    <svg fill="currentColor" viewBox="0 0 24 24" width="16" height="16"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-                    HIPAA Compliant
+        <section class="compliance" id="compliance">
+            <div class="compliance-container">
+                <div class="compliance-header">
+                    <div class="compliance-badge">
+                        <svg
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                            width="16"
+                            height="16"
+                        >
+                            <path
+                                d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"
+                            />
+                        </svg>
+                        HIPAA Compliant
+                    </div>
+                    <h2>Built for Healthcare Compliance</h2>
+                    <p>
+                        Security and privacy aren't afterthoughts—they shape
+                        every aspect of the system.
+                    </p>
                 </div>
-                <h2>Built for Healthcare Compliance</h2>
-                <p>Security and privacy aren't afterthoughts—they shape every aspect of the system.</p>
+                <div class="compliance-grid">
+                    <div class="compliance-item">
+                        <div class="compliance-check">
+                            <svg fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                                />
+                            </svg>
+                        </div>
+                        <p>
+                            <strong>Read-only access</strong> — We never modify
+                            your patient records
+                        </p>
+                    </div>
+                    <div class="compliance-item">
+                        <div class="compliance-check">
+                            <svg fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                                />
+                            </svg>
+                        </div>
+                        <p>
+                            <strong>Minimum necessary data</strong> — We only
+                            store what's essential
+                        </p>
+                    </div>
+                    <div class="compliance-item">
+                        <div class="compliance-check">
+                            <svg fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                                />
+                            </svg>
+                        </div>
+                        <p>
+                            <strong>Encrypted & secure</strong> — All data
+                            protected in transit and at rest
+                        </p>
+                    </div>
+                    <div class="compliance-item">
+                        <div class="compliance-check">
+                            <svg fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                                />
+                            </svg>
+                        </div>
+                        <p>
+                            <strong>No PHI in messages</strong> — Patient texts
+                            contain no medical information
+                        </p>
+                    </div>
+                    <div class="compliance-item">
+                        <div class="compliance-check">
+                            <svg fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                                />
+                            </svg>
+                        </div>
+                        <p>
+                            <strong>Complete audit trail</strong> — Full logging
+                            of all system activity
+                        </p>
+                    </div>
+                    <div class="compliance-item">
+                        <div class="compliance-check">
+                            <svg fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                                />
+                            </svg>
+                        </div>
+                        <p>
+                            <strong>BAA available</strong> — Business Associate
+                            Agreement for your compliance
+                        </p>
+                    </div>
+                </div>
             </div>
-            <div class="compliance-grid">
-                <div class="compliance-item">
-                    <div class="compliance-check">
-                        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                    </div>
-                    <p><strong>Read-only access</strong> — We never modify your patient records</p>
-                </div>
-                <div class="compliance-item">
-                    <div class="compliance-check">
-                        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                    </div>
-                    <p><strong>Minimum necessary data</strong> — We only store what's essential</p>
-                </div>
-                <div class="compliance-item">
-                    <div class="compliance-check">
-                        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                    </div>
-                    <p><strong>Encrypted & secure</strong> — All data protected in transit and at rest</p>
-                </div>
-                <div class="compliance-item">
-                    <div class="compliance-check">
-                        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                    </div>
-                    <p><strong>No PHI in messages</strong> — Patient texts contain no medical information</p>
-                </div>
-                <div class="compliance-item">
-                    <div class="compliance-check">
-                        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                    </div>
-                    <p><strong>Complete audit trail</strong> — Full logging of all system activity</p>
-                </div>
-                <div class="compliance-item">
-                    <div class="compliance-check">
-                        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                    </div>
-                    <p><strong>BAA available</strong> — Business Associate Agreement for your compliance</p>
-                </div>
+        </section>
+
+        <section class="cta">
+            <div class="cta-container">
+                <h2>Ready to Transform Your Waiting Room?</h2>
+                <p>
+                    See how Smart Arrivals can reduce patient wait times and
+                    walkouts while keeping your doctors busy.
+                </p>
+                <a href="#contact" class="btn">Request a Demo</a>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="cta">
-        <div class="cta-container">
-            <h2>Ready to Transform Your Waiting Room?</h2>
-            <p>See how Smart Arrivals can reduce patient wait times and walkouts while keeping your doctors busy.</p>
-            <a href="#contact" class="btn">Request a Demo</a>
-        </div>
-    </section>
-
-    <section class="contact" id="contact">
-        <div class="contact-container">
-            <h2>Get In Touch</h2>
-            <p>Interested in learning more? We'd love to show you how Smart Arrivals works.</p>
-            <div class="contact-card" style="max-width: 400px; margin: 0 auto;">
+        <section class="contact" id="contact">
+            <div class="contact-container">
+                <h2>Get In Touch</h2>
+                <p>
+                    Interested in learning more? We'd love to show you how Smart
+                    Arrivals works.
+                </p>
+                <div
+                    class="contact-card"
+                    style="max-width: 400px; margin: 0 auto"
+                >
                     <div class="contact-card-icon">
-                        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"
+                            />
+                        </svg>
                     </div>
                     <h3>Email Us</h3>
-                    <p><a href="mailto:SmartArrivals@smart-arrivals.com">SmartArrivals@smart-arrivals.com</a></p>
+                    <p>
+                        <a href="mailto:SmartArrivals@smart-arrivals.com"
+                            >SmartArrivals@smart-arrivals.com</a
+                        >
+                    </p>
                 </div>
-        </div>
-    </section>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-logo">Smart<span>Arrivals</span></div>
-            <p>&copy; 2026 Smart Arrivals. All rights reserved.</p>
-            <div class="footer-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">HIPAA Compliance</a>
             </div>
-        </div>
-    </footer>
-</body>
+        </section>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-logo">Smart<span>Arrivals</span></div>
+                <p>&copy; 2026 Smart Arrivals. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="sms-terms.html">Terms of Service</a>
+                </div>
+            </div>
+        </footer>
+    </body>
 </html>
