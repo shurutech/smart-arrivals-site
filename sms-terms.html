@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS Terms and Conditions | Smart Arrivals</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #1a1a2e;
+            background: #ffffff;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.25rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo span {
+            color: #0ea5e9;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #475569;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #0ea5e9;
+        }
+
+        .nav-cta {
+            background: #0ea5e9;
+            color: white !important;
+            padding: 0.6rem 1.25rem;
+            border-radius: 8px;
+            transition: all 0.3s !important;
+        }
+
+        .nav-cta:hover {
+            background: #0284c7;
+            color: white !important;
+        }
+
+        .legal-wrapper {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 9rem 5% 6rem;
+        }
+
+        .legal-wrapper h1 {
+            font-size: 2.25rem;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .legal-wrapper .updated {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .legal-wrapper h2 {
+            font-size: 1.4rem;
+            color: #0f172a;
+            margin: 2rem 0 1rem;
+        }
+
+        .legal-wrapper p {
+            color: #334155;
+            margin-bottom: 1rem;
+        }
+
+        .legal-wrapper a {
+            color: #0ea5e9;
+        }
+
+        .legal-wrapper strong {
+            color: #0f172a;
+        }
+
+        footer {
+            padding: 3rem 5%;
+            background: #0f172a;
+            color: white;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .footer-logo span {
+            color: #0ea5e9;
+        }
+
+        footer p {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a class="logo" href="index.html">
+            <div class="logo-icon">
+                <svg fill="white" viewBox="0 0 24 24" width="18" height="18"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            Smart<span>Arrivals</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html#problem">Problem</a></li>
+            <li><a href="index.html#solution">Solution</a></li>
+            <li><a href="index.html#how-it-works">How It Works</a></li>
+            <li><a href="index.html#compliance">Compliance</a></li>
+            <li><a href="index.html#contact" class="nav-cta">Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <div class="legal-wrapper">
+        <h1>SMS Terms and Conditions</h1>
+        <p class="updated">Last updated: September 4, 2026</p>
+
+        <h2>Program Description</h2>
+        <p>
+            Smart Arrival LLC ("Smart Arrivals," "we," "us," or "our") offers an SMS notification program
+            ("Program") that sends patients a courtesy text message when a clinic is running behind schedule,
+            letting you know an updated arrival time. This Program does not change, cancel, or reschedule your
+            appointment. Any change to your official appointment must be made by calling your clinic directly.
+        </p>
+
+        <h2>How You Are Enrolled</h2>
+        <p>
+            You are enrolled in this Program by providing your mobile phone number and consent during your
+            clinic's standard patient intake process (in person or by phone). By providing your number and
+            consenting, you agree to receive automated SMS text messages from Smart Arrivals related to your
+            appointment arrival time.
+        </p>
+
+        <h2>Message Frequency</h2>
+        <p>
+            Message frequency varies based on your appointment and how the clinic day is running. You should
+            expect to receive up to 3 messages per appointment day.
+        </p>
+
+        <h2>Message and Data Rates</h2>
+        <p>
+            Message and data rates may apply. Charges depend on your mobile carrier and plan.
+        </p>
+
+        <h2>Opt-Out</h2>
+        <p>
+            You can opt out of this Program at any time. Text <strong>STOP</strong> to the number you received
+            messages from to stop receiving all future SMS messages from Smart Arrivals. You will receive a
+            one-time confirmation message that you have been unsubscribed. After that, you will no longer
+            receive SMS messages from us unless you opt back in.
+        </p>
+
+        <h2>Help</h2>
+        <p>
+            For help, text <strong>HELP</strong> to the number you received messages from, or contact us
+            directly at <a href="mailto:dylanmoon1229@gmail.com">dylanmoon1229@gmail.com</a>. Standard message
+            and data rates apply to any HELP message sent.
+        </p>
+
+        <h2>Supported Carriers</h2>
+        <p>
+            Carriers are not liable for delayed or undelivered messages. Participating carriers include major
+            U.S. wireless carriers.
+        </p>
+
+        <h2>Privacy</h2>
+        <p>
+            We do not share, sell, or rent your mobile phone number or SMS opt-in information to third parties
+            for their own marketing purposes. Your phone number is used solely to operate this Program. See our
+            <a href="privacy.html">Privacy Policy</a> for more detail on how we handle your information.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+            Smart Arrival LLC<br>
+            1279 Belaire CT<br>
+            Naples, FL 34110<br>
+            United States<br>
+            <a href="mailto:dylanmoon1229@gmail.com">dylanmoon1229@gmail.com</a>
+        </p>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">Smart<span>Arrivals</span></div>
+            <p>&copy; 2026 Smart Arrivals. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="sms-terms.html">Terms of Service</a>
+                <a href="index.html#">HIPAA Compliance</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
